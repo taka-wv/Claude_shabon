@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>シャボン玉タスク</title>
+
+  <!-- ホーム画面に追加したときの設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="シャボン玉">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="apple-touch-icon.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- シャボン玉が漂う舞台 -->
+  <div id="stage" aria-label="タスクのシャボン玉">
+    <div id="decorLayer" class="layer"></div>
+    <div id="taskLayer" class="layer"></div>
+    <div id="fxLayer" class="layer"></div>
+  </div>
+
+  <!-- 今日割った数 -->
+  <div id="counter" aria-live="polite">今日 <span id="countNum">0</span></div>
+
+  <!-- タスク0件のときの案内 -->
+  <p id="emptyHint">＋でやることを追加</p>
+
+  <!-- 追加ボタン -->
+  <button id="addBtn" type="button" aria-label="やることを追加">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+  </button>
+
+  <!-- 玉のメニュー -->
+  <div id="menuBackdrop" hidden></div>
+  <div id="menu" role="dialog" aria-label="タスクのメニュー" hidden>
+    <p id="menuTitle"></p>
+    <p id="menuDeadline"></p>
+    <div class="menu-actions">
+      <button type="button" id="popBtn" class="btn primary">割る</button>
+      <button type="button" id="editBtn" class="btn">編集</button>
+      <button type="button" id="deleteBtn" class="btn danger-text">削除</button>
+    </div>
+  </div>
+
+  <!-- 入力シート -->
+  <div id="sheet" hidden>
+    <div class="sheet-backdrop" data-close="sheet"></div>
+    <form id="sheetPanel" class="sheet-panel" autocomplete="off" novalidate>
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <h2 id="sheetTitle">やることを追加</h2>
+
+      <label class="field">
+        <span class="field-label">タスク名 <span id="charCount" class="char-count">0/15</span></span>
+        <input id="titleInput" type="text" inputmode="text" enterkeyhint="done" placeholder="例：手紙書く" spellcheck="false">
+      </label>
+
+      <div class="field">
+        <span class="field-label">締切日（任意）</span>
+        <div class="date-row">
+          <div class="date-wrap">
+            <input id="dateInput" type="date" aria-label="締切日">
+            <span id="datePlaceholder" class="date-placeholder">締切なし</span>
+          </div>
+          <button type="button" id="dateClear" class="date-clear" aria-label="締切をなしにする">締切なしにする</button>
+        </div>
+      </div>
+
+      <div class="sheet-actions">
+        <button type="button" class="btn" data-close="sheet">キャンセル</button>
+        <button type="submit" id="submitBtn" class="btn primary" disabled>追加</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 削除の確認 -->
+  <div id="confirm" hidden>
+    <div class="confirm-backdrop" data-close="confirm"></div>
+    <div class="confirm-card" role="alertdialog" aria-labelledby="confirmMsg">
+      <p id="confirmMsg">このタスクを削除しますか？</p>
+      <p id="confirmName"></p>
+      <div class="confirm-actions">
+        <button type="button" class="btn" data-close="confirm">キャンセル</button>
+        <button type="button" id="confirmOk" class="btn danger">削除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- セーフエリアの値を読むための見えない要素 -->
+  <div id="safeProbe" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
